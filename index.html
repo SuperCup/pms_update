@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- 主容器 -->
+    <div class="flex h-screen">
+        <!-- 左侧导航栏 -->
+        <div class="w-64 bg-white shadow-lg">
+            <!-- 系统标题 -->
+            <div class="h-16 flex items-center justify-center border-b border-gray-200">
+                <span class="text-lg font-semibold text-gray-800">PMS</span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-4">
+                <ul class="space-y-1">
+                    <li class="bg-blue-50">
+                        <a href="index.html" class="block px-4 py-2 text-blue-600 font-medium border-r-2 border-blue-600">开票管理</a>
+                    </li>
+                    <li>
+                        <a href="invoice-apply.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">开票申请</a>
+                    </li>
+                    <li>
+                        <a href="batch-invoice.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">批量开票</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- 右侧主内容区 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 顶部导航栏 -->
+            <header class="h-16 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-6">
+                <div class="flex items-center">
+                    <span class="text-lg font-medium text-gray-800">开票管理</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">工具</span>
+                    <span class="text-sm text-gray-600">消息</span>
+                    <span class="text-sm text-gray-600">设置</span>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span class="text-xs text-gray-600">用户</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- 主内容区 -->
+            <main class="flex-1 p-6 overflow-auto">
+                <!-- 面包屑导航 -->
+                <div class="mb-4">
+                    <nav class="text-sm text-gray-600">
+                        <span>开票管理</span>
+                    </nav>
+                </div>
+                
+                <!-- 搜索筛选区域 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">全部开票</h3>
+                    
+                    <!-- 搜索表单 -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">开票编号:</label>
+                            <input type="text" id="invoiceCode" placeholder="请输入" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">客户名称:</label>
+                            <input type="text" id="customerName" placeholder="请输入" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">申请日期:</label>
+                            <input type="date" id="applyDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">状态:</label>
+                            <select id="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                                <option value="">请选择状态</option>
+                                <option value="草稿">草稿</option>
+                                <option value="审核中">审核中</option>
+                                <option value="已关联">已关联</option>
+                                <option value="未关联">未关联</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">PO编号:</label>
+                            <input type="text" id="poNumber" placeholder="请输入" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">单据类型:</label>
+                            <select id="documentType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                                <option value="">请选择单据类型</option>
+                                <option value="结算开票">结算开票</option>
+                                <option value="预开票">预开票</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">申请人:</label>
+                            <input type="text" id="applicant" placeholder="请输入" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">当前处理人:</label>
+                            <input type="text" id="currentHandler" placeholder="请输入" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div class="flex items-center space-x-3">
+                        <button id="searchBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 btn-hover">
+                            查询
+                        </button>
+                        <button id="resetBtn" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 btn-hover">
+                            重置
+                        </button>
+                        <button id="exportBtn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 btn-hover">
+                            导出
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 数据表格区域 -->
+                <div class="bg-white rounded-lg shadow-sm table-container">
+                    <!-- 表格头部操作 -->
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <button id="invoiceApplyBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 btn-hover">
+                                开票
+                            </button>
+                            <button id="batchInvoiceBtn" class="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 btn-hover">
+                                批量开票
+                            </button>
+                            <button id="voidInvoiceBtn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 btn-hover">
+                                作废
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 数据表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <input type="checkbox" class="rounded">
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开票编号</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">申请日期</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">单据类型</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PO编号</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">客户</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开票名称</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">申请人</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">申请金额</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">已开票金额</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">剩余关联金额</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">收款金额</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">关联状态</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">当前处理人</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoiceTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- 数据行将通过JavaScript动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 空状态提示 -->
+                    <div id="emptyState" class="text-center py-12 hidden">
+                        <div class="w-24 h-24 mx-auto mb-4 text-gray-300">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 text-lg mb-2">暂无开票数据</p>
+                        <p class="text-gray-400 text-sm">请尝试调整搜索条件或添加新的开票记录</p>
+                    </div>
+                    
+                    <!-- 分页组件 -->
+                    <div id="pagination" class="px-4 py-3 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            共 <span id="totalCount">0</span> 条记录，每页显示 
+                            <select id="pageSize" class="mx-1 px-2 py-1 border border-gray-300 rounded">
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                            </select>
+                            条
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="prevPage" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50" disabled>
+                                上一页
+                            </button>
+                            <div id="pageNumbers" class="flex space-x-1">
+                                <!-- 页码按钮将通过JavaScript动态生成 -->
+                            </div>
+                            <button id="nextPage" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50" disabled>
+                                下一页
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- 加载遮罩 -->
+    <div id="loadingMask" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+            <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full loading"></div>
+            <span class="text-gray-700">加载中...</span>
+        </div>
+    </div>
+    
+    <!-- 引入JavaScript文件 -->
+    <script src="./js/mockData.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>

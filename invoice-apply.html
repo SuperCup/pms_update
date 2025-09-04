@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开票申请 - PMS系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- 导航栏 -->
+        <nav class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold text-gray-900">开票申请</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="saveBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                            保存
+                        </button>
+                        <button id="submitBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                            提交申请
+                        </button>
+                        <a href="./index.html" class="text-gray-600 hover:text-gray-900 text-sm font-medium">
+                            返回首页
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+            
+        <!-- 表单内容区 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <form id="invoiceForm" class="space-y-6">
+                <!-- 公司开票信息 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">公司开票信息</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">单据类型 <span class="text-red-500">*</span></label>
+                            <select id="documentType" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                                <option value="结算开票" selected>结算开票</option>
+                                <option value="预开票">预开票</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">发票类型 <span class="text-red-500">*</span></label>
+                            <select id="invoiceType" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                                <option value="纸质专票" selected>纸质专票</option>
+                                <option value="电子普票">电子普票</option>
+                                <option value="电子专票">电子专票</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">开票方 <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" id="invoiceIssuer" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       value="上海智士网络科技有限公司" required>
+                                <button type="button" id="searchIssuer" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">PO编号 <span class="text-red-500">*</span></label>
+                            <input type="text" id="poNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                   placeholder="无PO编号的，请填写'无'" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">申请未税金额</label>
+                            <input type="number" id="untaxedAmount" class="w-full px-3 py-2 border border-gray-300 rounded-md" step="0.01">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">申请金额 <span class="text-red-500">*</span></label>
+                            <input type="number" id="taxedAmount" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                   step="0.01" placeholder="填写含税金额" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">发票内容 <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" id="invoiceContent" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       value="*信息技术服务*技术服务费" required>
+                                <button type="button" id="searchContent" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">发票备注栏打印内容 <span class="text-red-500">*</span></label>
+                            <textarea id="invoiceRemark" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                      placeholder="备注栏如无要求打印内容，请填写'无'" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                    
+                <!-- 客户开票信息 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">客户开票信息</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">客户 <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" id="customer" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       placeholder="从系统客户档案搜索" required>
+                                <button type="button" id="searchCustomer" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">客户开票档案 <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <select id="customerInvoiceProfile" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                                    <option value="">请选择客户开票档案</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 自动带出的开票信息 -->
+                    <div class="mt-4 p-4 bg-gray-50 rounded-md">
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">开票信息（选择开票档案后自动带出）</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">开票名称</label>
+                                <input type="text" id="invoiceName" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">税号</label>
+                                <input type="text" id="taxNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">电话</label>
+                                <input type="text" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">地址</label>
+                                <input type="text" id="address" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">银行</label>
+                                <input type="text" id="bank" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">银行账号</label>
+                                <input type="text" id="bankAccount" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+                <!-- 纸质发票、附件邮寄信息 -->
+                <div id="physicalMailSection" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">纸质发票、附件邮寄信息</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">邮寄地址 <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <input type="text" id="mailAddress" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       placeholder="可以手动填写，也可以从历史记录选择" required>
+                                <button type="button" id="selectMailAddress" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">收件人</label>
+                            <div class="relative">
+                                <input type="text" id="recipient" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       placeholder="可以手动填写，也可以从历史记录选择">
+                                <button type="button" id="selectRecipient" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">收件人电话</label>
+                            <div class="relative">
+                                <input type="tel" id="recipientPhone" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                       placeholder="可以手动填写，也可以从历史记录选择">
+                                <button type="button" id="selectRecipientPhone" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">发票附件是否盖章</label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="needStamp" value="yes" class="mr-2">
+                                    <span class="text-sm text-gray-700">是</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="needStamp" value="no" class="mr-2">
+                                    <span class="text-sm text-gray-700">否</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                        <p class="text-sm text-blue-700">
+                            <strong>备注：</strong>发票类型为"电子专票"且发票附件需要盖章时，如需财务寄送纸质附件，请填写"纸质发票、附件邮寄信息"的收件人信息，否则默认申请人自行寄送（财务不寄送）
+                        </p>
+                    </div>
+                </div>
+                    
+                <!-- 电子发票发送信息 -->
+                <div id="electronicDeliverySection" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">电子发票发送信息</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">交付方式 <span class="text-red-500">*</span></label>
+                            <select id="deliveryMethod" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                                <option value="">请选择交付方式</option>
+                                <option value="邮箱交付">邮箱交付</option>
+                                <option value="上传客户供应发票平台">上传客户供应发票平台</option>
+                            </select>
+                        </div>
+                        <div id="emailField">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">接收邮箱 <span class="text-red-500">*</span></label>
+                            <input type="email" id="receivingEmail" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                   placeholder="多个邮箱请用'、'隔开，如：123@qq.com、456@qq.com">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">交付格式 <span class="text-red-500">*</span></label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="deliveryFormat" value="PDF" class="mr-2">
+                                <span class="text-sm text-gray-700">PDF</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="deliveryFormat" value="OFD" class="mr-2">
+                                <span class="text-sm text-gray-700">OFD</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="deliveryFormat" value="XML" class="mr-2">
+                                <span class="text-sm text-gray-700">XML</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                        <p class="text-sm text-yellow-700">
+                            <strong>备注：</strong>交付方式选择"邮箱交付"方式的，接收邮箱和交付格式为必填；选择"上传客户供应发票平台"方式的，交付格式为必填。需和客户确认交付格式，可选择多种格式。接收邮箱存在多个时，请用符号"、"隔开。例如：123@qq.com、456@qq.com
+                        </p>
+                    </div>
+                </div>
+                    
+                <!-- 其他信息 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">其他信息</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">备注</label>
+                            <textarea id="otherRemark" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                      placeholder="请输入备注信息"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">附件</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                <input type="file" id="fileUpload" multiple class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                                <div class="space-y-2">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="text-sm text-gray-600">
+                                        <button type="button" id="uploadBtn" class="font-medium text-blue-600 hover:text-blue-500">点击上传文件</button>
+                                        或拖拽文件到此处
+                                    </div>
+                                    <p class="text-xs text-gray-500">支持 PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG 格式</p>
+                                </div>
+                            </div>
+                            <div id="fileList" class="mt-2 space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 关联结算单 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-medium text-gray-800 mb-4 border-b border-gray-200 pb-2">关联结算单</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">结算单</label>
+                                <div class="relative">
+                                    <input type="text" id="settlementOrder" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+                                           placeholder="从系统搜索选择">
+                                    <button type="button" id="searchSettlement" class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" id="addSettlement" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+                                添加
+                            </button>
+                        </div>
+                        
+                        <!-- 结算单列表 -->
+                        <div id="settlementList" class="space-y-3">
+                            <!-- 动态添加的结算单项目会显示在这里 -->
+                        </div>
+                        
+                        <!-- 结算单模板 -->
+                        <template id="settlementTemplate">
+                            <div class="settlement-item border border-gray-200 rounded-md p-4 bg-gray-50">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">结算单</label>
+                                        <input type="text" class="settlement-order w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">结算名称</label>
+                                        <input type="text" class="settlement-name w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">关联项目</label>
+                                        <input type="text" class="related-project w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">项目名称</label>
+                                        <input type="text" class="project-name w-full px-3 py-2 border border-gray-300 rounded-md bg-white" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">关联金额 <span class="text-red-500">*</span></label>
+                                        <div class="flex">
+                                            <input type="number" class="related-amount flex-1 px-3 py-2 border border-gray-300 rounded-l-md" step="0.01" required>
+                                            <button type="button" class="remove-settlement px-3 py-2 bg-red-500 text-white rounded-r-md hover:bg-red-600">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./js/invoice-apply.js"></script>
+</body>
+</html>

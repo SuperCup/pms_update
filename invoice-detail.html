@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开票详情 - PMS系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-900">开票详情</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.history.back()" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-arrow-left mr-2"></i>返回
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <!-- 页面标题和操作按钮 -->
+        <div class="mb-6 flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">开票申请详情</h2>
+                <p class="mt-1 text-sm text-gray-600">申请编号：<span id="applyCode">INV-2024-001</span></p>
+            </div>
+            <div class="flex space-x-3">
+                <button id="editBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    <i class="fas fa-edit mr-2"></i>编辑
+                </button>
+                <button id="printBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+                    <i class="fas fa-print mr-2"></i>打印
+                </button>
+            </div>
+        </div>
+
+        <!-- 申请状态 -->
+        <div class="mb-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-lg font-medium text-gray-900">申请状态：</span>
+                        <span id="statusBadge" class="ml-2 inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            待审核
+                        </span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        申请时间：<span id="applyTime">2024-01-15 10:30:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 左侧：申请信息 -->
+            <div class="space-y-6">
+                <!-- 申请人信息 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">申请人信息</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">申请人</label>
+                                <p id="applicantName" class="mt-1 text-sm text-gray-900">张三</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">部门</label>
+                                <p id="department" class="mt-1 text-sm text-gray-900">财务部</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">联系电话</label>
+                                <p id="phone" class="mt-1 text-sm text-gray-900">13800138000</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">邮箱</label>
+                                <p id="email" class="mt-1 text-sm text-gray-900">zhangsan@company.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 开票信息 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">开票信息</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">开票编号</label>
+                                <p id="invoiceCode" class="mt-1 text-sm text-gray-900">IN-2500014</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">单据类型</label>
+                                <p id="documentType" class="mt-1 text-sm text-gray-900">结算开票</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">PO编号</label>
+                                <p id="poNumber" class="mt-1 text-sm text-gray-900">无</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">开票名称</label>
+                                <p id="invoiceName" class="mt-1 text-sm text-gray-900">营销服务费</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">申请金额</label>
+                                <p id="applyAmount" class="mt-1 text-sm text-gray-900 font-semibold text-blue-600">¥100.00</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">已开票金额</label>
+                                <p id="invoicedAmount" class="mt-1 text-sm text-gray-900 font-semibold text-green-600">¥0.00</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">剩余关联金额</label>
+                                <p id="remainingAmount" class="mt-1 text-sm text-gray-900 font-semibold text-orange-600">¥0.00</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">收款金额</label>
+                                <p id="receivedAmount" class="mt-1 text-sm text-gray-900 font-semibold text-purple-600">¥0.00</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">关联状态</label>
+                                <p id="linkStatus" class="mt-1 text-sm text-gray-900">未关联</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">当前处理人</label>
+                                <p id="currentHandler" class="mt-1 text-sm text-gray-900">-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">备注</label>
+                            <p id="invoiceRemark" class="mt-1 text-sm text-gray-900">广东省市场</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目信息 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">项目信息</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">项目名称</label>
+                            <p id="projectName" class="mt-1 text-sm text-gray-900">企业管理系统开发项目</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">项目编号</label>
+                                <p id="projectCode" class="mt-1 text-sm text-gray-900">PRJ-2024-001</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">项目经理</label>
+                                <p id="projectManager" class="mt-1 text-sm text-gray-900">李四</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：客户信息和附件 -->
+            <div class="space-y-6">
+                <!-- 客户信息 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">客户信息</h3>
+                    </div>
+                    <div class="px-6 py-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">客户名称</label>
+                            <p id="customerName" class="mt-1 text-sm text-gray-900">北京科技有限公司</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">纳税人识别号</label>
+                            <p id="taxNumber" class="mt-1 text-sm text-gray-900">91110000123456789X</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">地址电话</label>
+                            <p id="customerAddress" class="mt-1 text-sm text-gray-900">北京市朝阳区xxx路xxx号 010-12345678</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">开户行及账号</label>
+                            <p id="bankInfo" class="mt-1 text-sm text-gray-900">中国银行北京分行 1234567890123456789</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 附件信息 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">相关附件</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="attachmentList" class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">合同文件.pdf</p>
+                                        <p class="text-xs text-gray-500">2.5 MB</p>
+                                    </div>
+                                </div>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-excel text-green-500 mr-3"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">项目清单.xlsx</p>
+                                        <p class="text-xs text-gray-500">1.2 MB</p>
+                                    </div>
+                                </div>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 审批记录 -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900">审批记录</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="approvalHistory" class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">张三 提交申请</p>
+                                        <p class="text-xs text-gray-500">2024-01-15 10:30</p>
+                                    </div>
+                                    <p class="text-sm text-gray-600">提交开票申请，等待审核</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-clock text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">待财务审核</p>
+                                        <p class="text-xs text-gray-500">当前状态</p>
+                                    </div>
+                                    <p class="text-sm text-gray-600">申请已提交，等待财务部门审核</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/invoice-detail.js"></script>
+</body>
+</html>
