@@ -565,7 +565,7 @@ class BatchInvoice {
                         ${this.getStatusText(item.status)}
                     </span>
                 </td>
-                <td class="px-3 py-2 text-sm space-x-2 whitespace-nowrap sticky-actions sticky right-0 bg-white border-l border-gray-200">
+                <td class="px-3 py-2 text-sm space-x-2 whitespace-nowrap sticky right-0 bg-white border-l border-gray-200">
                     ${item.status === 'error' ? `
                         <button onclick="batchInvoice.viewErrorDetail(${item.index - 1})" 
                                 class="text-red-600 hover:text-red-800 text-xs">
